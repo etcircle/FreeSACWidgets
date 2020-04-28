@@ -6,7 +6,7 @@
     <div id="di-autocomplete-main"
     class="decisionIncComponentWidgetPanel">
         <input id="di-autocomplete-widget" class="decisionIncInputField " value="" key="" type="text"
-            placeholder="Country"
+            placeholder="Enter Text..."
             style="font-size: 14px; border-color: rgb(191, 191, 191); 
             background-color: rgb(255, 255, 255);">
 
@@ -310,6 +310,9 @@
         setListLimit(limit){
                 this._listLimit = limit;         
         }
+        setPlaceholder(text){
+            this._inpField.setAttribute('placeholder', text);
+        }
 
         setSelectedKey(key) {
             let index = this._keys.indexOf(key);
@@ -388,7 +391,7 @@
         }
 
         _closeAllLists(elmnt) {
-            if (!this._inpField.getAttribute('key')) {
+            if (!this._inpField.getAttribute('key') && this._inpField.value) {
                 this._inpField.classList.add('di-input-error');
             } else {
                 this._inpField.classList.remove('di-input-error');
