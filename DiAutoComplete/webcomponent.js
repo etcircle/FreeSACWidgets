@@ -12,8 +12,6 @@
 
     </div>
 
-
-
     <style>
 
                     
@@ -240,6 +238,7 @@
             this._divElemnt = this._shadowRoot.getElementById("di-autocomplete-main");
             this._inpField = this._shadowRoot.getElementById("di-autocomplete-widget");
             this._listStyle = "font-family: Arial; font-size: 14px; color: rgb(51, 51, 51)";
+            this._listLimit = 5;
             
 
 
@@ -305,8 +304,11 @@
         }
 
         setListStyle(styleStr){
-            console.log(styleStr);
             this._listStyle = styleStr;
+        }
+
+        setListLimit(limit){
+                this._listLimit = limit;         
         }
 
         setSelectedKey(key) {
@@ -386,8 +388,6 @@
         }
 
         _closeAllLists(elmnt) {
-
-            console.log('check key')
             if (!this._inpField.getAttribute('key')) {
                 this._inpField.classList.add('di-input-error');
             } else {
@@ -499,10 +499,15 @@
             /*append the DIV element as a child of the autocomplete container:*/
             this._divElemnt.appendChild(a);
             /*for each item in the array...*/
+            let matchCount = 0;
             for (i = 0; i < arr.length; i++) {
+                if (matchCount >= this._listLimit) {
+                    continue;
+                }
                 /*check if the item starts with the same letters as the text field value:*/
                 //if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
                  if (arr[i].toUpperCase().includes(val.toUpperCase())) {
+                    matchCount++;
                     /*create a DIV element for each matching element:*/
                     let b = document.createElement("DIV");
                     /*make the matching letters bold:*/
