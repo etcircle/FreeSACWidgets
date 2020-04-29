@@ -1,7 +1,6 @@
 (function () {
     let tmpl = document.createElement('template');
     tmpl.innerHTML = `
-    <!--Make sure the form has the autocomplete function switched off:-->
 
     <div id="di-autocomplete-main"
     class="decisionIncComponentWidgetPanel">
@@ -25,23 +24,24 @@
             }
 
             input {
+
                 text-decoration: none;
                 border-color: rgb(191, 191, 191);
             }
 
             input[type=text] {
+                height: 14.5%;
                 background-color: rgb(255, 255, 255);
-                ;
                 width: 100%;
             }
 
             .autocomplete-items {
                 position: absolute;
-                border: 1px solid #d4d4d4;
+                /* border: 1px solid #d4d4d4;
                 border-bottom: none;
-                border-top: none;
+                border-top: none; */
+                height: auto;
                 z-index: 99;
-                top: 100%;
                 left: 0;
                 right: 0;
                 
@@ -51,7 +51,8 @@
                 padding: 5px;
                 cursor: pointer;
                 background-color: #fff;
-                border-bottom: 1px solid #d4d4d4;
+                border: 1px solid #d4d4d4;
+                border-top: none;
             }
 
             .autocomplete-items div:hover {
@@ -167,6 +168,9 @@
             .di-input-error{
                 border-color: red !important;
             }
+            .di-input-success{
+                font-weight: bold;
+            }
 
             .decisionIncInputField {
                 width: calc(100% - 18px);
@@ -239,14 +243,14 @@
             this._inpField = this._shadowRoot.getElementById("di-autocomplete-widget");
             this._listStyle = "font-family: Arial; font-size: 14px; color: rgb(51, 51, 51)";
             this._listLimit = 5;
-            
 
 
 
 
-           // autocomplete(this._inpField, countries);
 
-  
+            // autocomplete(this._inpField, countries);
+
+
         }
 
 
@@ -299,18 +303,18 @@
 
         }
 
-        setInputStyle(styleStr){
+        setInputStyle(styleStr) {
             this._inpField.style = styleStr;
         }
 
-        setListStyle(styleStr){
+        setListStyle(styleStr) {
             this._listStyle = styleStr;
         }
 
-        setListLimit(limit){
-                this._listLimit = limit;         
+        setListLimit(limit) {
+            this._listLimit = limit;
         }
-        setPlaceholder(text){
+        setPlaceholder(text) {
             this._inpField.setAttribute('placeholder', text);
         }
 
@@ -336,7 +340,7 @@
             this._inpField.addEventListener("keydown", this._onKeyDown.bind(this));
             document.addEventListener("click", (e) => {
                 this._closeAllLists(e.target);
-            },true);
+            }, true);
         }
 
         //Fired when the widget is removed from the html DOM of the page (e.g. by hide)
@@ -381,7 +385,7 @@
             }
         }
 
-  
+
 
         _removeActive(x) {
             /*a function to remove the "active" class from all autocomplete items:*/
@@ -391,10 +395,14 @@
         }
 
         _closeAllLists(elmnt) {
+
             if (!this._inpField.getAttribute('key') && this._inpField.value) {
                 this._inpField.classList.add('di-input-error');
+                this._inpField.classList.remove('di-input-success');
             } else {
                 this._inpField.classList.remove('di-input-error');
+                this._inpField.classList.add('di-input-success');
+                
             }
 
             /*close all autocomplete lists in the document,
@@ -456,25 +464,53 @@
             ;
         }
 
-        _isValueFull(value){
-            let index = this._values.indexOf(value);
+        _isValueFull(value) {
+            let index = 0;
+            for (index = 0; index < this._values.length; index++) {
+                if (this._values[index].trim() == value.trim()) {
+                    break;
+                };
 
-            if (index >= 0) {
+            }
+
+            if (index < this._values.length) {
+                this._inpField.classList.remove('di-input-error');
+                this._inpField.classList.add('di-input-success');
+
 
                 this._inpField.value = value;
-            
+
                 this._inpField.setAttribute("value", value);
                 this._inpField.setAttribute("key", this._keys[index]);
-    
+
                 let selectEvent = new Event("onSelect");
                 this.dispatchEvent(selectEvent);
 
                 return true;
-                
             } else {
+                this._inpField.classList.remove('di-input-success');
                 return false;
             }
-            
+
+
+            //Doesn't work
+            // let index = this._values.indexOf(value.trim());
+            // if (index >= 0) {
+
+            //     this._inpField.value = value;
+
+            //     this._inpField.setAttribute("value", value);
+            //     this._inpField.setAttribute("key", this._keys[index]);
+
+            //     let selectEvent = new Event("onSelect");
+            //     this.dispatchEvent(selectEvent);
+
+            //     return true;
+
+            // } else {
+            //     return false;
+            // }
+
 
         }
 
@@ -487,8 +523,8 @@
             /*close any already open lists of autocompleted values*/
             this._closeAllLists();
             if (!val || this._inpField.getAttribute('value') == val
-                    || this._isValueFull(val)) 
-            { return false; 
+                || this._isValueFull(val)) {
+                return false;
             } else {
                 this._inpField.setAttribute("value", "");
                 this._inpField.setAttribute("key", "");
@@ -498,7 +534,7 @@
             a = document.createElement("DIV");
             a.setAttribute("id", this._inpId + "autocomplete-list");
             a.setAttribute("class", "autocomplete-items");
-            
+
             /*append the DIV element as a child of the autocomplete container:*/
             this._divElemnt.appendChild(a);
             /*for each item in the array...*/
@@ -509,7 +545,7 @@
                 }
                 /*check if the item starts with the same letters as the text field value:*/
                 //if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-                 if (arr[i].toUpperCase().includes(val.toUpperCase())) {
+                if (arr[i].toUpperCase().includes(val.toUpperCase())) {
                     matchCount++;
                     /*create a DIV element for each matching element:*/
                     let b = document.createElement("DIV");
@@ -517,7 +553,7 @@
 
                     let indexVal = arr[i].toUpperCase().indexOf(val.toUpperCase());
 
-                    b.style =  this._listStyle;
+                    b.style = this._listStyle;
                     b.innerHTML = arr[i].substr(0, indexVal);
                     b.innerHTML += "<strong>" + arr[i].substr(indexVal, val.length) + "</strong>";
                     b.innerHTML += arr[i].substr(indexVal + val.length, arr[i].length);
@@ -526,19 +562,19 @@
                     /*make the matching letters bold:*/
 
                     /*insert a input field that will hold the current array item's value:*/
-                    
+
                     /*execute a function when someone clicks on the item value (DIV element):*/
-                    b.addEventListener("click",  (e) => {
+                    b.addEventListener("click", (e) => {
 
                         let inpItem = b.getElementsByTagName("input")[0];
                         this._inpField.value = inpItem.value;
-            
+
                         this._inpField.setAttribute("value", inpItem.getAttribute('value'));
                         this._inpField.setAttribute("key", inpItem.getAttribute('key'));
-            
+
                         let selectEvent = new Event("onSelect");
                         this.dispatchEvent(selectEvent);
-            
+
                         this._closeAllLists();
                     });
                     a.appendChild(b);
