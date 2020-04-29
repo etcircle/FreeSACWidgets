@@ -37,8 +37,7 @@
 
             .autocomplete-items {
                 position: absolute;
-                border: 1px solid #d4d4d4;
-                border-top: none; */
+                border: 1px solid rgb(191, 191, 191);
                 height: auto;
                 z-index: 99;
                 left: 0;
