@@ -37,8 +37,7 @@
 
             .autocomplete-items {
                 position: absolute;
-                /* border: 1px solid #d4d4d4;
-                border-bottom: none;
+                border: 1px solid #d4d4d4;
                 border-top: none; */
                 height: auto;
                 z-index: 99;
@@ -51,13 +50,11 @@
                 padding: 5px;
                 cursor: pointer;
                 background-color: #fff;
-                border: 1px solid #d4d4d4;
                 border-top: none;
             }
 
             .autocomplete-items div:hover {
                 background-color: rgb(240, 240, 240);
-                outline: rgb(0, 0, 0) dotted 1px;
             }
 
             * {
@@ -69,7 +66,6 @@
 
 
             .autocomplete-active {
-                font-weight: bold;
                 background-color: rgb(240, 240, 240) !important;
                 outline: rgb(0, 0, 0) dotted 1px;
             }
