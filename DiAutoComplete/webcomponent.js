@@ -30,7 +30,7 @@
             }
 
             input[type=text] {
-                height: 14.5%;
+                height: 26px;
                 background-color: rgb(255, 255, 255);
                 width: 100%;
             }
